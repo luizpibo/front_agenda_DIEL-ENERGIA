@@ -1,6 +1,6 @@
-import { Events } from "../components/Dashboard/context/SchedulerProvider";
+import { IEvent } from "../components/Dashboard/context/SchedulerProvider";
 
-export const updateLocalStorage = (paramsEvents: Events[]) => {
+export const updateLocalStorage = (paramsEvents: IEvent[]) => {
   localStorage.removeItem("events");
   localStorage.setItem("events", JSON.stringify(paramsEvents));
 };

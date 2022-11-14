@@ -1,7 +1,7 @@
 import { Button } from "flowbite-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useContext } from "react";
-import { IEventDTO, SchedulerContext } from "../../context/SchedulerProvider";
+import { IEvent, IEventDTO, SchedulerContext } from "../../context/SchedulerProvider";
 import moment from "moment";
 
 interface IEventForm {
@@ -47,9 +47,9 @@ const EventForm = ({
 }) => {
   const {
     handleAddEvent,
-    handleEventUpdateWithIEventDTO,
     selectedEvent,
     handleDeleteEvent,
+    handleUpdateEvent,
   } = useContext(SchedulerContext);
   const { register, handleSubmit } = useForm<IEventDTO>(
     currentModal == "alterar_tarefa"
@@ -63,7 +63,6 @@ const EventForm = ({
   );
 
   const onSubmit: SubmitHandler<IEventDTO> = (data) => {
-    console.log("Current modal", currentModal);
     switch (currentModal) {
       case "adicionar_tarefa":
         handleAddEvent(data);
@@ -71,7 +70,7 @@ const EventForm = ({
         break;
       case "alterar_tarefa":
         console.log("to alterando");
-        handleEventUpdateWithIEventDTO(data);
+        handleUpdateEvent(data, selectedEvent as IEvent);
         closeModal();
         break;
     }

@@ -10,9 +10,7 @@ interface IScheduler {
   setCurrentModal: (modalName: "adicionar_tarefa"| "alterar_tarefa" | "buscar_tarefa" )=>any
 }
 const Scheduler: React.FC<IScheduler> = ({setCurrentModal}) => {
-  const { calendarRef, events, selectEventById } =
-    useContext(SchedulerContext);
-    console.log("events of Scheduler", events);
+  const { calendarRef, events, selectEventById } = useContext(SchedulerContext);
     
   return (
     <div className="flex-col flex-1 rounded bg-gray-800 p-4 shadow-lg text-gray-200">
@@ -33,10 +31,8 @@ const Scheduler: React.FC<IScheduler> = ({setCurrentModal}) => {
           list: "Lista",
         }}
         eventClick={(e) => {
-          console.log("Event id", e.event.id);
-          if(selectEventById(e.event.id)){
-            setCurrentModal('alterar_tarefa')
-          }
+          selectEventById(e.event.id)
+          setCurrentModal('alterar_tarefa')
         }}
         height={480}
         initialDate={Date.now()}
