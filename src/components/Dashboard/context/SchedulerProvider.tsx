@@ -7,9 +7,9 @@ import {
   useState,
 } from "react";
 import FullCalendar from "@fullcalendar/react";
-import {
-  schedulerService
-} from "../../../services/schedulerService";
+import { schedulerService } from "../../../services/schedulerService";
+import { Alert } from "flowbite-react";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 export interface IEvent {
   start: string;
@@ -26,7 +26,10 @@ interface ISchedulerContext {
   events?: IEvent[];
   selectedEvent?: IEvent;
   handleAddEvent: (event: IEventDTO) => Promise<void>;
-  handleUpdateEvent: (eventDTO: IEventDTO, selectedEvent: IEvent) => Promise<void>;
+  handleUpdateEvent: (
+    eventDTO: IEventDTO,
+    selectedEvent: IEvent
+  ) => Promise<void>;
   selectEventById: (eventId: string) => boolean;
   handleDeleteEvent: (eventId: string) => void;
 }
@@ -47,18 +50,18 @@ export const SchedulerContext = createContext<ISchedulerContext>(
 );
 
 const SchedulerProvider: React.FC<IProvider> = ({ children }) => {
-  // const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [selectedEvent, setSelectedEvent] = useState<IEvent>();
   const [events, setEvents] = useState<IEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null!);
 
-  // useEffect(() => {
-  //   const fetchData = async (userUid: string) =>
-  //     await getAllUserEventsService(userUid);
-  //   fetchData(currentUser.userUid).then((data) => {
-  //     setEvents(data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    const fetchData = async (userUid: string) =>
+      await schedulerService.getAllUserEvents(userUid);
+    fetchData(currentUser.userUid).then((data) => {
+      setEvents(data);
+    });
+  }, [currentUser.userUid]);
 
   const updateEventState = (newEvent: IEvent) => {
     const newEventsList = events.map((event) => {
@@ -81,26 +84,41 @@ const SchedulerProvider: React.FC<IProvider> = ({ children }) => {
 
   const handleAddEvent = async (eventDTO: IEventDTO) => {
     try {
-      const newEvent = await  schedulerService.addNewEvent(eventDTO);
-      setEvents([...events, newEvent]);
-    } catch(e){
-      console.log("Erro ao adicionar tarefa")
+      const newEvent = await schedulerService.addNewEvent(eventDTO, currentUser.userUid);
+      setEvents((events) => [...events, newEvent]);
+    } catch (e) {
+      console.log("Erro ao adicionar tarefa");
     }
   };
 
-  const handleUpdateEvent = async (eventDTO: IEventDTO, selectedEvent: IEvent) => {
-    const updatedEvent = await schedulerService.updadeEvent(eventDTO, selectedEvent);
-    updateEventState(updatedEvent);
+  const handleUpdateEvent = async (
+    eventDTO: IEventDTO,
+    selectedEvent: IEvent
+  ) => {
+    try{
+      const updatedEvent = await schedulerService.updadeEvent(
+        eventDTO,
+        selectedEvent
+      );
+      updateEventState(updatedEvent);
+    } catch (e){
+      console.log("erro ao atualizar tarefa")
+    }
   };
 
   const handleDeleteEvent = async (eventId: string) => {
-    await schedulerService.deleteEvent(eventId);
-    const newEventsList = events.filter((event)=>{
-      if(event.id != eventId){
-        return event
-      }
-    })
-    setEvents(newEventsList);
+    try{
+      await schedulerService.deleteEvent(eventId);
+      const newEventsList = events.filter((event) => {
+        if (event.id != eventId) {
+          return event;
+        }
+      });
+      setEvents(newEventsList);
+    } catch (e){
+      console.log("Erro ao deletar tarefa", "failure")
+    } 
+
   };
 
   return (
@@ -113,7 +131,7 @@ const SchedulerProvider: React.FC<IProvider> = ({ children }) => {
           handleAddEvent,
           handleUpdateEvent,
           handleDeleteEvent,
-          selectEventById,
+          selectEventById
         }}
       >
         {children}

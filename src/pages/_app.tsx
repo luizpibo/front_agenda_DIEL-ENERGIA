@@ -6,8 +6,10 @@ import "@fullcalendar/timegrid/main.css";
 import "@fullcalendar/list/main.css";
 import '@fullcalendar/resource-timeline/main.css';
 import '@fullcalendar/timeline/main.css'
+import { NextPage } from 'next';
 
-function MyApp({ Component, pageProps }: AppProps) {
+
+const MyApp: NextPage<AppProps> = ({ Component, pageProps}: AppProps) => {
   return <Component {...pageProps} />
 }
 

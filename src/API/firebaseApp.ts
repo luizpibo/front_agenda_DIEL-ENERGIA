@@ -1,13 +1,15 @@
 import { getFirestore } from "firebase/firestore";
-import { initializeApp, getApps, getApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import firebaseConfig from "../config/firebaseconfig";
 
-const app = getApps()[0]
-
+let app;
 if (!getApps().length) {
-    const app = initializeApp(firebaseConfig);
+    app = initializeApp(firebaseConfig);
+}else{
+    app = getApps()[0]
 }
+
 
 export const auth = getAuth(app);
 export const fireStoreApp = getFirestore(app);

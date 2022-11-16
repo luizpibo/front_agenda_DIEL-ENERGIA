@@ -54,12 +54,14 @@ class SchedulerService {
     return eventsList as IEvent[];
   }
 
-  public async addNewEvent(eventDTO: IEventDTO): Promise<IEvent> {
+  public async addNewEvent(eventDTO: IEventDTO, userId: string): Promise<IEvent> {
     const formatedEvent = this.formatEventDTO(eventDTO);
-    return await addDoc(this.dbInstance, formatedEvent).then((data) => {
+    return await addDoc(this.dbInstance, {...formatedEvent, userUid: userId}).then((data) => {
+      console.log("dados do evento", data.id)
       return {
         ...formatedEvent,
         id: data.id,
+        userUid: userId
       };
     });
   }
@@ -79,6 +81,7 @@ class SchedulerService {
 
   public async deleteEvent(eventId: string) {
     try {
+      console.log("event id", eventId);
       const refDoc = doc(this.dbInstance, eventId);
       const returnEvent = await deleteDoc(refDoc);
     } catch (e) {

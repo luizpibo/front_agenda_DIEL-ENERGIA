@@ -2,12 +2,12 @@ import {
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  onIdTokenChanged,
   signInWithPopup,
 } from "firebase/auth";
 import { Button } from "flowbite-react";
 import React, { createContext, useEffect, useState } from "react";
 import { auth } from "../API/firebaseApp";
-
 const provider = new GoogleAuthProvider();
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
@@ -26,8 +26,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentUser, setCurrentUser] = useState<ICurrentUser>();
+
   useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
+    onAuthStateChanged(getAuth(), async (user) => {
       if (user) {
         setCurrentUser({
           userUid: user.uid,
@@ -41,18 +42,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-
-        const user = result.user;
-        console.log({ credential, token, user });
+        console.log("resultado do login", result)
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         const email = error.email;
         const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log({ errorCode, errorMessage, email, credential });
       });
   };
 

@@ -14,6 +14,7 @@ const Dashboard = () => {
   const openModal = () => {
     setIsOpen(true);
   };
+
   const setCurrentModal = (modalName: string) => {
     setModal(modalName);
     openModal();
