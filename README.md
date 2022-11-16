@@ -8,7 +8,7 @@
  baixe o projeto,
  baixe as dependencias,
  Crie uma conta na firebase e inicie um novo projeto,
- crie um novo banco fireStore com uma coleção com nome task,
+ crie um novo banco fireStore com as autorizações de escrita no banco ativada,
  crie o arquivo .env com os dados de configuração da firebase. 
 
 # Tecnologias
@@ -25,25 +25,16 @@ Firebase
 
 # Casos de uso
 
-- Login com o email do google;
-- Adicionar tarefa;
-- Editar tarefa;
-- Deletar tarefa;
-- Vizualizar tarefas por dia, semana e mes;
+- Login com o email do google
+![tela de login](./public/telaLogin.PNG)
+![login com o google](./public/loginGoogle.PNG)
+- Adicionar tarefa
+![adicionando tarefa](./public/adicionar%20tarefa.PNG)
+![tarefa criada](./public/tarefa%20teste.PNG)
+- Editar tarefa
+![tarefa editada](./public/alterar%20tarefa.PNG)
+![tarefa editada](./public/tarefa%20alterada.PNG)
 
-# Modelos do banco de dados
+- Buscar tarefa.
+![buscar tarefa](./public/buscar%20tarefa.PNG)
 
-
-```js
-
-task:{
-	description "teste"
-	duration "50"
-	end "2022-10-19T00:10:00.000Z"
-	id "dgVHDyK3wdAJpVerStS9"
-	(string)
-	start "2022-10-18T23:20:00.000Z"
-	title "teste" 
-}
-
-```
